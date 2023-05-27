@@ -1,0 +1,13 @@
+modules:
+  jira:globalPage:
+    - key: marios-custom-ui-hello-world
+      function: main
+      title: Form app
+  function:
+    - key: main
+      handler: index.run
+app:
+  id: ari:cloud:ecosystem::app/4483fc14-37d7-4c0c-87fe-f04f38c8628c
+permissions:
+  scopes:
+    - write:servicedesk-request
