@@ -13,7 +13,7 @@ import ForgeUI, { render,
 import api, { route } from "@forge/api";
 
 async function createJiraRequest(formData) {
-console.log(route);
+
   try {
     const response = await api.asUser().requestJira(route`/rest/servicedeskapi/request`, {
       method: "POST",
@@ -30,14 +30,17 @@ console.log(route);
       },
     });
 
+    const data = await response.json();
+
     if (response.status === 201) {
       console.log("Request created successfully");
+      console.log(data);
+      dataIssueKey = data.issueKey;
+
     } else {
       console.log("1. Failed to create request:", response.status, response.statusText);
       console.log("2. Error:", response);
-
     }
-    return response
   } catch (error) {
     console.log("Error creating request:", error);
   }
@@ -45,28 +48,26 @@ console.log(route);
 
 
 const App = () => {
-
-  console.log("App");
-
+  // useState is a UI kit hook we use to manage the form data in local state
+  const [formState, setFormState] = useState(undefined);
+  const [formResult, setFormResult] = useState(undefined); // Not used
   // Handles form submission, which is a good place to call APIs, or to set component state...
   const handleSubmit = async (formData) => {
-      console.log("Submit>>>>>>>>>>>>>>>>>>");
-      await createJiraRequest(formData);
+      data = await createJiraRequest(formData);
+
     };
 
   const goBack = () => {};
-  const cancel = () => {
   const cancel = () => {};
-    // useState is a UI kit hook we use to manage the form data in local state
-    const [formState, setFormState] = useState(undefined);
-  };
 
   // The array of additional buttons.
   // These buttons align to the right of the submit button.
+  const issueKey = "issueKey:" + (dataIssueKey);
   const actionButtons = [
     <Button text="Go back" onClick={goBack} />,
     <Button text="Cancel" onClick={cancel} />,
   ];
+
 
   return (
     <Fragment>
@@ -76,6 +77,7 @@ const App = () => {
           <Checkbox defaultChecked value="jira" label="Reserve Only" />
           <Checkbox value="confluence" label="No Reserve" />
         </CheckboxGroup>
+        /*Display result*/
       </Form>
     </Fragment>
   );

@@ -1,5 +1,5 @@
 import api from "@forge/api";
-
+// To be used as the request handler
 async function createJiraRequest(formData) {
   try {
     const response = await api.asApp().requestJira("/rest/servicedeskapi/request", {
